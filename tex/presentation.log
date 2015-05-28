@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.15 (MiKTeX 2.9) (preloaded format=pdflatex 2015.5.28)  28 MAY 2015 21:38
+This is pdfTeX, Version 3.14159265-2.6-1.40.15 (MiKTeX 2.9) (preloaded format=pdflatex 2015.5.28)  28 MAY 2015 22:03
 entering extended mode
 **presentation.tex
 (presentation.tex
@@ -1103,16 +1103,18 @@ Overfull \hbox (1.50334pt too wide) in paragraph at lines 9--10
 
 ] (presentation.vrb) [17
 
-] [18
+] (presentation.vrb) [18
 
 ] [19
 
 ] [20
 
-] (presentation.vrb) [21
+] [21
 
 ]
-(presentation.vrb
+(presentation.vrb) [22
+
+] (presentation.vrb
 Overfull \hbox (1.50334pt too wide) in paragraph at lines 8--9
 [][][][][][][][][][][][][] 
  []
@@ -1127,29 +1129,29 @@ Overfull \hbox (8.07341pt too wide) in paragraph at lines 10--11
 [][][][][][][][][][][][][][][][][][][][][][] 
  []
 
-) [22
-
-] [23
+) [23
 
 ] [24
 
-] (presentation.vrb) [25
+] [25
 
-] [26
+] (presentation.vrb) [26
 
-] (presentation.vrb) [27
+] [27
 
-] [28
+] (presentation.vrb) [28
+
+] [29
 
 ]
-(presentation.vrb) [29
+(presentation.vrb) [30
 
 ] (presentation.vrb
 LaTeX Font Info:    Font shape `OT4/cmss/m/it' in size <10.95> not available
 (Font)              Font shape `OT4/cmss/m/sl' tried instead on input line 12.
-) [30
+) [31
 
-] (presentation.vrb) [31
+] (presentation.vrb) [32
 
 ]
 (presentation.vrb
@@ -1157,36 +1159,36 @@ Overfull \hbox (93.4843pt too wide) in paragraph at lines 13--14
 [][][][][][][][][][][][][][][][][][] 
  []
 
-) [32
+) [33
 
-] [33
-
-] (presentation.vrb) [34
+] [34
 
 ] (presentation.vrb) [35
+
+] (presentation.vrb) [36
 
 ]
 \tf@nav=\write6
 \tf@toc=\write7
 \tf@snm=\write8
-Package atveryend Info: Empty hook `BeforeClearDocument' on input line 577.
-Package atveryend Info: Empty hook `AfterLastShipout' on input line 577.
+Package atveryend Info: Empty hook `BeforeClearDocument' on input line 594.
+Package atveryend Info: Empty hook `AfterLastShipout' on input line 594.
  (presentation.aux)
-Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 577.
-Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 577.
+Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 594.
+Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 594.
 Package rerunfilecheck Info: File `presentation.out' has not changed.
 (rerunfilecheck)             Checksum: BD1EF7E1A901B245152446EE1BF6DD06;431.
 
 
 LaTeX Font Warning: Some font shapes were not available, defaults substituted.
 
-Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 577.
+Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 594.
  ) 
 Here is how much of TeX's memory you used:
- 20497 strings out of 493671
- 367049 string characters out of 3141408
+ 20503 strings out of 493671
+ 367116 string characters out of 3141408
  449175 words of memory out of 3000000
- 23267 multiletter control sequences out of 15000+200000
+ 23269 multiletter control sequences out of 15000+200000
  16718 words of font info for 52 fonts, out of 3000000 for 9000
  1025 hyphenation exceptions out of 8191
  56i,11n,55p,412b,2116s stack positions out of 5000i,500n,10000p,200000b,50000s
@@ -1208,9 +1210,9 @@ ic/pl/plss10.pfb><C:/Program Files (x86)/MiKTeX 2.9/fonts/type1/public/pl/plss1
 /Program Files (x86)/MiKTeX 2.9/fonts/type1/public/pl/plssi10.pfb><C:/Program F
 iles (x86)/MiKTeX 2.9/fonts/type1/public/pl/plsy10.pfb><C:/Program Files (x86)/
 MiKTeX 2.9/fonts/type1/public/pl/pltt10.pfb>
-Output written on presentation.pdf (35 pages, 159249 bytes).
+Output written on presentation.pdf (36 pages, 160754 bytes).
 PDF statistics:
- 304 PDF objects out of 1000 (max. 8388607)
- 78 named destinations out of 1000 (max. 500000)
+ 310 PDF objects out of 1000 (max. 8388607)
+ 80 named destinations out of 1000 (max. 500000)
  99 words of extra memory for PDF output out of 10000 (max. 10000000)
 

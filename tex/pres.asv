@@ -1,4 +1,5 @@
-%% Przyklad 3.1
+%% Przyklad 1
+% Pokazanie struktury RGB w matlabie jako tablicy trójwymiarowej
 RGB=reshape(ones(64,1)*reshape(jet(64),1,192),[64,64,3]);
 R=RGB(:,:,1);
 G=RGB(:,:,2);
@@ -7,7 +8,8 @@ imshow(R)
 figure, imshow(G)
 figure, imshow(B)
 figure, imshow(RGB)
-%% Przyklad 4.1
+%% Przyklad 2
+% 
 A = imread('ngc6543a.jpg');
 image(A);
 A(300, 300, 1)
@@ -24,8 +26,7 @@ load clown
 whos
 imwrite(X,map,'clown.bmp')
 imwrite(X,map, 'clown.jpg')
-X/100
-imwrite(X/100, 'clown3.jpg')
+
 %% Przyklad 7
 imfinfo('clown.bmp')
 %% Przyklad 8

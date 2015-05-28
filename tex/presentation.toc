@@ -3,6 +3,6 @@
 \beamer@sectionintoc {2}{Procedury wczytuj\IeC {\k a}ce i zapisuj\IeC {\k a}ce obrazy}{4}{0}{2}
 \beamer@sectionintoc {3}{Wy\IeC {\'s}wietlanie i badanie obraz\IeC {\'o}w}{9}{0}{3}
 \beamer@sectionintoc {4}{Transformacje obraz\IeC {\'o}w}{13}{0}{4}
-\beamer@sectionintoc {5}{Zmiana kontrastu}{27}{0}{5}
-\beamer@sectionintoc {6}{Filtrowanie obrazu}{32}{0}{6}
-\beamer@sectionintoc {7}{Arytmetyka obraz\IeC {\'o}w}{35}{0}{7}
+\beamer@sectionintoc {5}{Zmiana kontrastu}{28}{0}{5}
+\beamer@sectionintoc {6}{Filtrowanie obrazu}{33}{0}{6}
+\beamer@sectionintoc {7}{Arytmetyka obraz\IeC {\'o}w}{36}{0}{7}

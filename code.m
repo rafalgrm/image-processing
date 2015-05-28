@@ -1,4 +1,4 @@
-%% Przyklad 3.1
+%% Przyklad 1
 RGB=reshape(ones(64,1)*reshape(jet(64),1,192),[64,64,3]);
 R=RGB(:,:,1);
 G=RGB(:,:,2);
@@ -7,13 +7,13 @@ imshow(R)
 figure, imshow(G)
 figure, imshow(B)
 figure, imshow(RGB)
-%% Przyklad 4.1
+%% Przyklad 2
 A = imread('ngc6543a.jpg');
 image(A);
 A(300, 300, 1)
 A(300, 300, 2)
 A(300, 300, 3)
-%% Przyklad 5.1
+%% Przyklad 3
 [X,map] = imread('corn.tif');
 if ~isempty(map)
     Im = ind2rgb(X,map);
@@ -24,8 +24,6 @@ load clown
 whos
 imwrite(X,map,'clown.bmp')
 imwrite(X,map, 'clown.jpg')
-X/100
-imwrite(X/100, 'clown3.jpg')
 %% Przyklad 7
 imfinfo('clown.bmp')
 %% Przyklad 8
@@ -38,11 +36,6 @@ figure, imshow(moon, 'Border', 'tight');
 subplot(1,2,1), subimage(X1,map1)
 subplot(1,2,2), subimage(X2,map2)
 
-%% potem zadanie
-[X1,map1]=imread('forest.tif');
-[X2,map2]=imread('trees.tif');
-subplot(1,2,1), imshow(X1,map1)
-subplot(1,2,2), imshow(X2,map2)
 %% Przyklad 10
 imtool(moon)
 %% przyklad 11
@@ -138,7 +131,7 @@ boundaryReplicateRGB = imfilter(originalRGB, h, 'replicate');
 figure, imshow(boundaryReplicateRGB)
 %% przyklad 22
 I = imread('moon.tif');
-h = fspecial('unsharp')
+h = fspecial('?')
 I2 = imfilter(I,h);
 imshow(I)
 title('Original Image')

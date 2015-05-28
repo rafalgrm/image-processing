@@ -275,6 +275,23 @@ figure, imshow(J)
 \end{frame}
 
 \begin{frame}[fragile]
+\frametitle{Zadanie na plusa}
+\begin{example}
+\begin{lstlisting}
+[X1,map1]=imread('forest.tif');
+[X2,map2]=imread('trees.tif');
+subplot(1,2,1), imshow(X1,map1)
+subplot(1,2,2), imshow(X2,map2)
+\end{lstlisting}
+\end{example}
+
+\begin{alertblock}{Zadanie}
+Czy wynik tego będzie zadowalający? To znaczy czy zobaczymy takie same obrazy jakbyśmy wyświetlali je na pojedynczych figurach? A jeśli nie to czemu jest źle?
+\end{alertblock}
+
+\end{frame}
+
+\begin{frame}[fragile]
 \frametitle{Obracanie obrazu}
 
 \begin{block}{Funkcja imrotate}
@@ -426,7 +443,7 @@ figure, imshowpair(fixed,registered1,'blend');
 \end{frame}
 
 \begin{frame}{Rejestracja obrazu}
-\begin{block}
+\begin{block}{Rejestracja obrazu}
 Oczywiście istnieje cały szereg funkcji i opcji umożliwiających wykonywanie automatycznych rejestracji. Jedną z nich jest imregister. Tu jednak nie będziemy ich omawiać. Zainteresowanych odsyłamy do dokumentacji Matlaba.
 \end{block}
 \end{frame}

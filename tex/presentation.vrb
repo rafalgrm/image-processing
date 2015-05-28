@@ -1,0 +1,4 @@
+\frametitle{Arytmetyka na obrazach}
+\begin{block}{Wprowadzenie}
+Arytmetyka na obrazach to po prostu operacje jakie znamy: dodawanie, odejmowanie, mnożenie dzielenie, tyle, że wykonywane na macierzach będącymi obrazami.
+\end{block}

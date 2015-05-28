@@ -1,0 +1,577 @@
+\documentclass{beamer}
+%
+% Choose how your presentation looks.
+%
+% For more themes, color themes and font themes, see:
+% http://deic.uab.es/~iblanes/beamer_gallery/index_by_theme.html
+%
+\mode<presentation>
+{
+  \usetheme{default}      % or try Darmstadt, Madrid, Warsaw, ...
+  \usecolortheme{default} % or try albatross, beaver, crane, ...
+  \usefonttheme{default}  % or try serif, structurebold, ...
+  \setbeamertemplate{navigation symbols}{}
+  \setbeamertemplate{caption}[numbered]
+} 
+
+\usepackage{polski}
+\usepackage{listings}
+\lstset{language=Matlab}          % Set your language (you can change the language for each code-block optionally)
+
+\usepackage{sansmathaccent}
+\pdfmapfile{+sansmathaccent.map}
+
+\usepackage[utf8x]{inputenc}
+
+\title[Image Processing Toolbox]{Przegląd algorytmów i narzędzi do analizy obrazów w Matlabie}
+\author{Rafał \textsc{Grabiański} i Zbigniew \textsc{Królikowski}}
+\institute{}
+\date{29.05.2015}
+
+\begin{document}
+
+\begin{frame}
+  \titlepage
+\end{frame}
+
+% Uncomment these lines for an automatically generated outline.
+%\begin{frame}{Outline}
+%  \tableofcontents
+%\end{frame}
+
+\section{Struktury danych dla obrazu}
+
+\begin{frame}{Struktura danych dla obrazu}
+
+\begin{block}{Reprezentacja obrazu}
+Naturalną strukturą do przechowywania obrazów jest macierz. Mamy cztery typy reprezentacji, które
+wpływają na to jak wartości w tej macierzy są przez program interpretowane.
+\end{block}
+
+
+\begin{itemize}
+  \item \texttt{Binary (bilevel image)} - tablica wartości logicznych 1 i 0. Interpretowanych jako kolor czarny i biały.
+  \item \texttt{Indexed (pseudocolor image)} - tablica wartości całkowitych, które są indeksami w mapie kolorów $m \times 3$.
+  \item \texttt{Grayscale (intensity image)} - tablica wartości stanowiących kontrast danego piksela. Najczęściej do obrazów w skali szarości, chociaż można też mapować z colormapą.
+  \item \texttt{Truecolor (RGB image)} - macierz $m \times n \times 3$, w której w trzecim wymiarze przechowujemy dokładną informację o kolorach czerwonym, zielonym i niebieskim.
+\end{itemize}
+
+\end{frame}
+
+\begin{frame}[fragile]
+\frametitle{Struktura danych dla obrazu}
+
+\begin{example}
+\begin{lstlisting}
+RGB = reshape(ones(64,1)
+	*reshape(jet(64),1,192),[64,64,3]);
+R = RGB(:,:,1);
+G = RGB(:,:,2);
+B = RGB(:,:,3);
+figure,	imshow(R)
+figure, imshow(G)
+figure, imshow(B)
+figure, imshow(RGB)
+\end{lstlisting}
+\end{example}
+
+\end{frame}
+
+\section{Procedury wczytujące i zapisujące obrazy}
+
+\begin{frame}[fragile]
+\frametitle{Wczytywanie obrazu}
+\begin{block}{Funkcja imread}
+Wczytywanie obrazu do macierzy w matlabie sprowadza się do wywołania funkcji imread z nazwą obrazu. Po zawartości pliku imread rozpoznaje jego typ i zwraca macierz/-e obrazu. Można oczywiście w odpowiednim parametrze wyspecyfikować ten typ.
+\end{block}
+
+\begin{example}
+\begin{lstlisting}
+RGB = imread('football.jpg');
+[X,map] = imread('trees.tif');
+\end{lstlisting}
+\end{example}
+
+\end{frame}
+
+\begin{frame}[fragile]
+\frametitle{Wczytywanie obrazu - przykłady}
+\begin{example}
+\begin{lstlisting}
+A = imread('ngc6543a.jpg');
+image(A);
+A(300, 300, 1)
+A(300, 300, 2)
+A(300, 300, 3)
+
+[X,map] = imread('corn.tif');
+if ~isempty(map)
+    Im = ind2rgb(X,map);
+end
+whos Im;
+\end{lstlisting}
+\end{example}
+
+\end{frame}
+
+\begin{frame}[fragile]
+\frametitle{Zapisywanie obrazu}
+\begin{block}{Funkcja imwrite}
+Funkcja imwrite zapisuje podaną macierz w postaci obrazu, którego typ rozpoznaje z podanej nazwy pliku albo przy użyciu odpowiedniego parametru.
+\end{block}
+
+\begin{example}
+\begin{lstlisting}
+imwrite(X,map,'clown.bmp')
+imwrite(X,map,'clown.jpg')
+\end{lstlisting}
+\end{example}
+
+\begin{alertblock}{Zadanie}
+
+\begin{lstlisting}
+X/100
+imwrite(X/100, 'clown3.jpg')
+\end{lstlisting}
+\end{alertblock}
+
+\end{frame}
+
+\begin{frame}[fragile]
+\frametitle{Konwertowanie pomiędzy formatami obrazów}
+\begin{block}{Konwersja}
+Nie ma specjalnych funkcji konwertujących pomiędzy różnymi formatami. Używamy już omówionych imread i imwrite do odpowiednich konwersji.
+\end{block}
+\end{frame}
+
+\begin{frame}[fragile]
+\frametitle{Pozyskiwanie informacji o pliku}
+\begin{block}{Funkcja imfinfo}
+Do odczytania typu obrazu i jego różnych właściwości możemy użyć funkcji imfinfo, w argumencie podając nazwę pliku.
+\end{block}
+
+\begin{example}
+\begin{lstlisting}
+info = imfinfo('ngc6543a.jpg')
+\end{lstlisting}
+\end{example}
+\end{frame}
+
+\section{Wyświetlanie i badanie obrazów}
+
+\begin{frame}[fragile]
+\frametitle{Wyświetlanie i badanie obrazów}
+\begin{block}{Display and exploration tools}
+Funkcje i aplikacje do wyświetlania i badania obrazów służą do oglądania zdjęć, pozyskiwania szczegółowych informacji o posczególnych pikselach, ustawiania kontrastu czy też pomiaru odległości. Wprowadzimy w tym referacie najbardziej podstawowe narzędzia.
+\end{block}
+
+\begin{block}{Funkcja imshow}
+Funkcja imshow służy do otwierania w oknie Matlaba zdjęcia. Jeżeli nie mieści się ono na ekranie jest przeskalowywane. Standardowo po wyświetleniu jeden piksel na ekranie - jeden piksel zdjęcia.
+\end{block}
+
+\begin{example}
+\begin{lstlisting}
+moon = imread('moon.tif');
+imshow(moon);
+figure, imshow(moon, 'Border', 'tight');
+\end{lstlisting}
+\end{example}
+\end{frame}
+
+\begin{frame}[fragile]
+\frametitle{Wyświetlanie i badanie obrazów - przykłady}
+\begin{block}{Przykłady}
+Prezentujemy jeszcze przykład wyświetlenia dwóch obrazów w jednej figurze. Subplot dzieli figurę, a subimage działa jak imshow, z tą jednak różnicą, że przed wyświetleniem konwertuje obraz na format truecolor. Przy wyświetlaniu zdjęć w jednej figurze musiałyby mieć w przeciwnym wypadku tę samą colormapę.
+\end{block}
+
+\begin{example}
+\begin{lstlisting}
+[X1,map1]=imread('forest.tif');
+[X2,map2]=imread('trees.tif');
+subplot(1,2,1), subimage(X1,map1)
+subplot(1,2,2), subimage(X2,map2)
+\end{lstlisting}
+\end{example}
+
+\end{frame}
+
+\begin{frame}[fragile]
+\frametitle{Image Viewer App}
+\begin{block}{Image Viewer App}
+Image Viewer App to prosty tool do wyświetlania obrazów i wykonywania podstawowych operacji na obrazach. To zintegrowane środowisko zawiera w sobie wiele pomocnych tooli:
+\end{block}
+
+\begin{itemize}
+  \item \texttt{Pixel Information Tool} - do uzyskiwania informacji o bieżącym pikselu.
+  \item \texttt{Pixel Region Tool} - do uzyskiwania informacji o grupie pikseli.
+  \item \texttt{Distance Tool} - do pomiaru odległości między dwoma pikselami.
+  \item \texttt{Adjust Contrast Tool} - do zmiany kontrastu wyświeltanego obrazu i modyfikowania danych.
+  \item \texttt{Crop Image Tool} - do przycinania.
+  \item \texttt{Display Range Tool} - do zmiany zakresu natężeń obrazu.
+\end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]
+\frametitle{Image Viewer App - użycie}
+\begin{block}{Funkcja imtool}
+Aby uruchomić Image Viewer App, wybieramy odpowiednią opcję z poziomu menu File albo używamy funkcji imtool.
+\end{block}
+
+\begin{example}
+\begin{lstlisting}
+imtool('moon.tif');
+imtool('moon.tif', 'InitialMagnification', 150)
+\end{lstlisting}
+\end{example}
+\end{frame}
+
+\section{Transformacje obrazów}
+
+\begin{frame}
+\frametitle{Transformacje geometryczne obrazu, spatial referencing, rejestracja obrazu}
+\begin{block}{Plan}
+Zajmiemy się na początku prostymi przekształceniami geometrycznymi obrazu by później skończyć na bardziej zaawansowanym przykładzie rejestracji obrazu.
+\end{block}
+\end{frame}
+
+\begin{frame}[fragile]
+\frametitle{Skalowanie obrazu}
+\begin{block}{Funkcja imresize}
+Aby zmienić rozmiar obrazu używamy funkcji imresize. Kluczowy jest magnification factor, który podajemy jako argument. Dla wartości większych od 1 obraz wyjściowy będzie większy niż oryginalny.
+\end{block}
+
+\begin{example}
+\begin{lstlisting}
+I = imread('circuit.tif');
+J = imresize(I,1.25);
+imshow(I)
+figure, imshow(J)
+\end{lstlisting}
+\end{example}
+
+\end{frame}
+
+\begin{frame}[fragile]
+\frametitle{Skalowanie obrazu - dodatkowe parametry}
+
+\begin{block}{Interpolacja przy powiększaniu obrazu}
+Do funkcji imresize możemy podać w apostrofach argument mówiący o metodzie interpolowania pikseli powstałych przy powięszeniu obrazu. Opcja 'bicubic' jest defaultowa.
+\end{block}
+
+\begin{block}{Zjawisko aliasingu podczas zmniejszania rozmiaru obrazu}
+Domyślnie podczas zmniejszania rozmiaru obrazu, funkcja imresize używa antialiasingu. Możemy tę opcję wyłączyć dodając argumenty: 'Antialiasing', false.
+\end{block}
+
+\begin{example}
+\begin{lstlisting}
+I = imread('rice.png');
+J = imresize(I, 0.5, 'Antialiasing', false);
+figure, imshow(I), figure, imshow(J)
+J = imresize(I, 0.5);
+figure, imshow(J)
+\end{lstlisting}
+\end{example}
+
+\end{frame}
+
+\begin{frame}[fragile]
+\frametitle{Obracanie obrazu}
+
+\begin{block}{Funkcja imrotate}
+Do obracania obrazu używamy funkcji imrotate podając w argumencie oprócz macierzy obrazu, kąt obrócenia. Dodatni kąt obraca w ruchu przeciwnym do ruchu wskazówek zegara.
+\end{block}
+
+\begin{example}
+\begin{lstlisting}
+I = imread('circuit.tif');
+J = imrotate(I,35,'bilinear');
+imshow(I)
+figure, imshow(J)
+\end{lstlisting}
+\end{example}
+
+\end{frame}
+
+
+\begin{frame}[fragile]
+\frametitle{Przycinanie obrazu}
+\begin{block}{Funkcja imcrop}
+Do przycinania obrazu używamy funkcji imcrop. Możemy wywołać ją interaktywnie lub podając konretne parametry w postaci [xmin, ymin, width, height].
+\end{block}
+
+\begin{example}
+\begin{lstlisting}
+I = imread('circuit.tif');
+J = imcrop(I,[60 40 100 90]);
+\end{lstlisting}
+\end{example}
+
+\end{frame}
+
+\begin{frame}
+\frametitle{Geometryczna transformacja 2D}
+
+\begin{block}{Transformacja geometryczna}
+Wykonanie transformacji w Image Processing Toolbox składa się z dwóch etapów.
+\end{block}
+
+\begin{itemize}
+	\item Stworzenie obiektu transformacji \texttt{geometric transformation object}
+	\item Użycie funkcji \texttt{imwarp} podając obraz do transformacji i obiekt transformacji
+\end{itemize}
+\end{frame}
+
+\begin{frame}
+\frametitle{Geometryczna transformacja 2D}
+\begin{block}{Macierze transformacji}
+Macierze transformacji służą temu by stosować rachunek macierzowy przy składaniu przekształcenia. Każdy piksel reprezentuje się przy pomocy macierzy $3 \times 1$ postaci [x, y, 1]. Przekształcenie to macierz, która po pomnożeniu przez punkt wskaże pozycję tego punktu. I tak macierz translacji o współrzędne $[t_x, t_y]$ będzie miała postać: \\
+\centering
+$T = \begin{bmatrix}
+	1 & 0 & 0\\
+	0 & 1 & 0\\
+	t_x & t_y & 1
+\end{bmatrix}$
+\end{block}
+\end{frame}
+
+\begin{frame}
+\frametitle{Inne przykłady macierzy transformacji}
+\begin{block}{Skalowanie}
+\centering
+$S = \begin{bmatrix}
+	s_x & 0 & 0\\
+	0 & s_y & 0\\
+	0 & 0 & 1
+\end{bmatrix}$
+\end{block}
+\begin{block}{Rotacja}
+\centering
+$R = \begin{bmatrix}
+	cos(\alpha) & sin(\alpha) & 0\\
+	-sin(\alpha) & cos(\alpha) & 0\\
+	0 & 0 & 1
+\end{bmatrix}$
+\end{block}
+\end{frame}
+
+\begin{frame}[fragile]
+\frametitle{Przykład prostej translacji obrazu}
+\begin{block}{Translacja 2D obrazu}
+Najpierw odczytujemy obraz, który użyjemy do przekształcenia. Następnie tworzymy z macierzy transformacji obiekt transormacji funkcją affine2d. Ostatnim krokiem jest użycie funkcji imwarp podając obraz i uzyskany wcześniej obiekt.
+Wszystko co zaraz zrobimy można zrobić też jedną funkcją imtranslate.
+\end{block}
+
+\end{frame}
+
+\begin{frame}[fragile]
+\frametitle{Przykład prostej translacji obrazu}
+\begin{example}
+\begin{lstlisting}
+cb = checkerboard;
+tform = affine2d([1 0 0; 0 1 0; 20 20 1]);
+Rcb = imref2d(size(cb))
+Rout = Rcb;
+Rout.XWorldLimits(2) = Rout.XWorldLimits(2)+20;
+Rout.YWorldLimits(2) = Rout.YWorldLimits(2)+20;
+[out,Rout] = imwarp(cb,tform,'OutputView',Rout);
+figure, subplot(1,2,1);
+imshow(cb,Rcb);
+subplot(1,2,2);
+imshow(out,Rout)
+\end{lstlisting}
+\end{example}
+\end{frame}
+
+\begin{frame}
+\frametitle{Rejestracja obrazu}
+\begin{block}{Rejestracja obrazu}
+Rejestracja obrazu jest procesem przenoszenia kilku zbiorów danych do jednego układu współrzędnych.
+Wykonamy przykładową rejestrację dwóch obrazów używając spatial referencing.
+\end{block}
+\end{frame}
+
+\begin{frame}{Przykładowa rejestracja obrazu}
+
+\begin{itemize}
+	\item Odczytanie dwóch przykładowych obrazów
+	\item Wczytujemy gotowe wspólne punkty dla obu obrazów
+	\item Tworzymy obiekt transformacji typu projective
+	\item Używamy funkcji imwarp z gotowym obiektem do wykonania transformacji na przestawionym obrazie
+	\item Wyświetlamy obrazy w odpowiednim układzie
+\end{itemize}
+
+\end{frame}
+
+\begin{frame}[fragile]
+\frametitle{Przykładowa rejestracja obrazu}
+\begin{example}
+\begin{lstlisting}
+fixed = imread('westconcordorthophoto.png');
+moving = imread('westconcordaerial.png');
+load westconcordpoints
+tform = fitgeotrans(movingPoints, fixedPoints, 
+			'projective');
+registered = imwarp(moving, tform,
+			'FillValues', 255);
+figure, imshow(registered);
+Rfixed = imref2d(size(fixed));
+registered1 = imwarp(moving,tform,
+			'FillValues', 255,
+			'OutputView',Rfixed);
+				
+figure, imshowpair(fixed,registered1,'blend');
+\end{lstlisting}
+\end{example}
+
+\end{frame}
+
+\begin{frame}{Rejestracja obrazu}
+\begin{block}
+Oczywiście istnieje cały szereg funkcji i opcji umożliwiających wykonywanie automatycznych rejestracji. Jedną z nich jest imregister. Tu jednak nie będziemy ich omawiać. Zainteresowanych odsyłamy do dokumentacji Matlaba.
+\end{block}
+\end{frame}
+
+\section{Zmiana kontrastu}
+
+\begin{frame}[fragile]
+\frametitle{Ustawianie kontrastu}
+\begin{block}{Ustawianie kontrastu}
+Techniki, które teraz zaprezentujemy mogą być opisanie wspólnie mianem technik retuszujących, które mają za zadanie "poprawić" w jakiś subiektywny sposób obraz. Pierwszą jaką zaprezentujemy to zwiększenie kontrastu.
+\end{block}
+
+\begin{example}
+\begin{lstlisting}
+I = dicomread('CT-MONO2-16-ankle.dcm');
+imtool(I,'DisplayRange',[])
+\end{lstlisting}
+\end{example}
+
+\end{frame}
+
+\begin{frame}{Ustawianie kontrastu}
+\begin{block}{funkcja imadjust}
+Funkcja imadjust zwiększa kontrast w taki sposób, że rozszerza skalę szarości do całego zakresu. Powoduje to, że obraz staje się wyraźniejszy i wykorzystywane są wszystkie odcienie szarości.
+\end{block}
+\end{frame}
+
+\begin{frame}[fragile]
+\frametitle{Ustawianie kontrastu}
+\begin{example}
+\begin{lstlisting}
+I = imread('pout.tif');
+imshow(I);
+imtool(I);
+imtool(J);
+J = imadjust(I);
+figure, imshow(J);
+\end{lstlisting}
+\end{example}
+\end{frame}
+
+\begin{frame}[fragile]
+\frametitle{Ustawianie kontrastu}
+\begin{block}{Funkcja imadjust}
+Zwykłe użycie imadjust - czy to z ograniczeniem czy na całym zakrasie powoduje, że wartości rozciągają się liniowo na zadanym przedziale, jeślibyśmy jednak chcieli by było inaczej, musimy jako 4. argument podać współczynnik gamma.
+\end{block}
+\begin{example}
+\begin{lstlisting}
+[X,map] = imread('forest.tif');
+I = ind2gray(X,map);
+J = imadjust(I,[],[],0.5);
+K = imadjust(I,[],[],2);
+imshow(I)
+%figure, imshow(J)
+%figure, imshow(K)
+imtool(J)
+imtool(K)
+\end{lstlisting}
+\end{example}
+\end{frame}
+
+\begin{frame}[fragile]
+\frametitle{Histogram equalization}
+\begin{example}
+\begin{lstlisting}
+I = imread('pout.tif');
+J = histeq(I);
+imshow(J)
+figure, imhist(J,64)
+\end{lstlisting}
+\end{example}
+\end{frame}
+
+\section{Filtrowanie obrazu}
+
+\begin{frame}[fragile]
+\frametitle{Filtrowanie obrazu}
+\begin{block}{Funkcjia imfilter}
+Filtrowaniu obrazu nie poświęcimy dużo czasu. Pokażemy tylkko kilka z wielu różnych możliwości:
+\end{block}
+
+\begin{example}
+\begin{lstlisting}
+originalRGB = imread('peppers.png');
+imshow(originalRGB)
+h = fspecial('motion', 50, 45);
+filteredRGB = imfilter(originalRGB, h);
+figure, imshow(filteredRGB)
+boundaryReplicateRGB = imfilter(originalRGB, h, 'replicate');
+figure, imshow(boundaryReplicateRGB)
+\end{lstlisting}
+\end{example}
+
+\end{frame}
+
+\begin{frame}{Filtrowanie obrazu}
+\begin{block}{Filtrowanie obrazu}
+Filtrowanie obrazu to proces, w którym wartość dla danego piksela jest ustalana na podstawie wartości z funkcji biorącej jako argumenty wartości dla pikseli znajdujących się w sąsiedztwie. Jeżeli jest to kombinacja liniowa wartości wtedy filtrowanie nazywamy filtrowaniem liniowym.
+Omówimy dwa podstawowe filtrowania:
+\end{block}
+
+\begin{itemize}
+	\item Convolution - liniowe filtrowanie z wagami podanymi w postaci macierzy (wyjaśnimy na przykładzie)
+	\item Correlation - właściwie to samo co konwolucja, jedyna różnica, to że kernel korelacji nie jest obracany
+\end{itemize}
+
+\end{frame}
+
+\begin{frame}[fragile]
+\frametitle{Użycie gotowego filtra}
+\begin{block}{Użycie filtra}
+Użyjemy teraz predefiniowanego filtra na jednym z obrazów.
+\end{block}
+
+\begin{example}
+\begin{lstlisting}
+I = imread('moon.tif');
+h = fspecial('?')
+I2 = imfilter(I,h);
+imshow(I)
+figure
+imshow(I2)
+\end{lstlisting}
+\end{example}
+
+\begin{alertblock}{Zadanie}
+Wiedząc że: h = $\begin{bmatrix}
+   -0.1667  & -0.6667 &  -0.1667\\
+   -0.6667  &  4.3333 &  -0.6667\\
+   -0.1667  & -0.6667 &  -0.1667
+\end{bmatrix}$\\
+Powiedz jaki efekt uzyskamy na Księżycu używając tego filtra.
+\end{alertblock}
+
+\end{frame}
+
+\section{Arytmetyka obrazów}
+
+
+\begin{frame}[fragile]
+\frametitle{Arytmetyka na obrazach}
+\begin{block}{Wprowadzenie}
+Arytmetyka na obrazach to po prostu operacje jakie znamy: dodawanie, odejmowanie, mnożenie dzielenie, tyle, że wykonywane na macierzach będącymi obrazami.
+\end{block}
+\end{frame}
+
+
+\end{document}
